@@ -1,2 +1,1 @@
-# LeetcodePractice
-My practice in leetcode
+practice in leetcode
