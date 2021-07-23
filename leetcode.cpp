@@ -1,8 +1,7 @@
 /**
  * date: 2018-6-24
  * author: zlm
- * These codes mainly derive from my practice in leetcode, 
- * and a fraction of them are from nowcoder.com
+ * Leetcode top 100 && nowcoder && jianzhioffer
  */
 #include <iostream>
 #include <cmath>
@@ -24,10 +23,10 @@ using namespace std;
 
 
 struct TreeNode {
-	int val;
-	TreeNode *left;
-	TreeNode *right;
-	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+  int val;
+  TreeNode *left;
+  TreeNode *right;
+  TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
 struct ListNode {
@@ -39,101 +38,101 @@ struct ListNode {
 // 1.Two Sum
 class Solution {
 public:
-	vector<int> twoSum(vector<int> &numbers, int target) {
-		if (numbers.empty())
-			return vector<int>();
-		vector<int> indice;
-		
-		map<int, int> hash;
-		int len = numbers.size();
-		for (int i = 0; i < len; i++) {
-			hash[numbers[i]] = i;
-		}
-		for (int i = 0; i < len; i++) {
-			int sub = target - numbers[i];
-			// 题目要求满足条件的两个数必须不同，故不需要考虑同一个元素加上自身的情况
-			if (hash.find(sub) != hash.end() && hash[sub] > i) {
-				indice.push_back(i + 1);
-				indice.push_back(hash[sub] + 1);
-				break;
-			}
-		}
-		return indice;
-	}
+  vector<int> twoSum(vector<int> &numbers, int target) {
+    if (numbers.empty())
+      return vector<int>();
+    vector<int> indice;
+    
+    map<int, int> hash;
+    int len = numbers.size();
+    for (int i = 0; i < len; i++) {
+      hash[numbers[i]] = i;
+    }
+    for (int i = 0; i < len; i++) {
+      int sub = target - numbers[i];
+      // 题目要求满足条件的两个数必须不同，故不需要考虑同一个元素加上自身的情况
+      if (hash.find(sub) != hash.end() && hash[sub] > i) {
+        indice.push_back(i + 1);
+        indice.push_back(hash[sub] + 1);
+        break;
+      }
+    }
+    return indice;
+  }
 };
 
 // improved version
 vector<int> twoSum2(vector<int> &num, int target) {
-	if (num.empty())
-		return vector<int>();
-	vector<int> res(2);
-	unordered_map<int, int> mp;
-	int len = num.size();
-	for (int i = 0; i < len; i++) {
-		int sub = target - num[i];
-		if (mp.find(sub) != mp.end()) { // 已经找到了两个元素
-			res[0] = mp[sub];
-			res[1] = mp[num[i]];
-			break;
-		}
-		else
-			mp.insert({num[i], i}); // mp[num[i]] = i;
-	}
+  if (num.empty())
+    return vector<int>();
+  vector<int> res(2);
+  unordered_map<int, int> mp;
+  int len = num.size();
+  for (int i = 0; i < len; i++) {
+    int sub = target - num[i];
+    if (mp.find(sub) != mp.end()) { // 已经找到了两个元素
+      res[0] = mp[sub];
+      res[1] = mp[num[i]];
+      break;
+    }
+    else
+      mp.insert({num[i], i}); // mp[num[i]] = i;
+  }
 }
 
 // 2.reverse list
 // 使用循环实现(no head node)
 class Solution7 {
 public:
-	ListNode* reverseList(ListNode* head) {
-		if (head == nullptr || head->next == nullptr) // 只有一个结点或者为空
-			return head;
+  ListNode* reverseList(ListNode* head) {
+    if (head == nullptr || head->next == nullptr) // 只有一个结点或者为空
+      return head;
 
-		//ListNode *newHead = new ListNode(0);
-		ListNode *pre = head;
-		ListNode *pcur = head->next;
-		ListNode *pnext = nullptr;
+    //ListNode *newHead = new ListNode(0);
+    ListNode *pre = head;
+    ListNode *pcur = head->next;
+    ListNode *pnext = nullptr;
 
-		while (pcur != nullptr) {
-			pnext = pcur->next;
-			pcur->next = pre; // 改变指向
-			
-			pre = pcur;
-			pcur = pnext;
-		} // end 此时pre指向最后一个结点，即反向后的第一个结点
-		head->next = nullptr;
-		return pre;
-	}
+    while (pcur != nullptr) {
+      pnext = pcur->next;
+      pcur->next = pre; // 改变指向
+      
+      pre = pcur;
+      pcur = pnext;
+    } // end 此时pre指向最后一个结点，即反向后的第一个结点
+    head->next = nullptr;
+    return pre;
+  }
 };
 
 // 3.带环链表的入口结点
 // fast and slow pointer
 class Solution8 {
 public:
-	ListNode *detectCycle(ListNode *head) {
-		if (head == nullptr || head->next == nullptr)
-			return nullptr;
+  ListNode *detectCycle(ListNode *head) {
+    if (head == nullptr || head->next == nullptr)
+      return nullptr;
 
-		ListNode *fast = head;
-		ListNode *slow = head;
+    ListNode *fast = head;
+    ListNode *slow = head;
 
-		while (fast != nullptr && fast->next != nullptr) {
-			fast = fast->next->next;
-			slow = slow->next;
-			if (slow == fast)
-				break;
-		}
- 		// 正常退出while循环，说明没有环存在
-		if (fast == nullptr || fast->next == nullptr)
-			return nullptr;
-		// 否则：slow==fast，存在环，设置slow = head，当slow移动到入口结点，则fast正好移动至入口结点
-		slow = head;
-		while (slow != fast) {
-			slow = slow->next;
-			fast = fast->next;
-		}
-		return fast;
-	}
+    while (fast != nullptr && fast->next != nullptr) {
+      fast = fast->next->next;
+      slow = slow->next;
+      if (slow == fast)
+        break;
+    }
+     // 正常退出while循环，说明没有环存在
+    if (fast == nullptr || fast->next == nullptr)
+      return nullptr;
+    // 否则：slow==fast，存在环，设置slow = head，当slow移动到入口结点，则fast正好移动至入口结点
+    slow = head;
+    while (slow != fast) {
+      slow = slow->next;
+      fast = fast->next;
+    }
+    return fast;
+  }
 };
 
 // 5.数组中第k大的元素
@@ -141,16 +140,16 @@ public:
 // 不建议这种方法，可通过小顶堆来实现
 class Solution9 {
 public:
-	int findKthLargest(vector<int>& nums, int k) {
-		if (k < 1 || k > (int)nums.size() || nums.empty())
-			return 0;
+  int findKthLargest(vector<int>& nums, int k) {
+    if (k < 1 || k > (int)nums.size() || nums.empty())
+      return 0;
 
-		sort(nums.begin(), nums.end());
-		reverse(nums.begin(), nums.end()); // 把序列从大到小排列
-		int len = nums.size();
+    sort(nums.begin(), nums.end());
+    reverse(nums.begin(), nums.end()); // 把序列从大到小排列
+    int len = nums.size();
 
-		return nums[k - 1];
-	}
+    return nums[k - 1];
+  }
 };
 
 /** 题目 347. Top K Frequent Elements
@@ -160,31 +159,31 @@ public:
  */
 class Solution10 {
 public:
-	vector<int> topKFrequent(vector<int>& nums, int k) {
-		vector<int> res;
-		if (nums.empty())
-			return res;
-		
-		unordered_map<int, int> mp;
-		for (auto v : nums) {
-			mp[v]++;
-		}
-		if (k > mp.size())
-			return res;
-		priority_queue<pair<int, int>> que; // 使用优先队列（基于红黑树实现，队头元素top最大）
-		
-		// 按元素出现频次进行排序
-		for (auto it = mp.begin(); it != mp.end(); it++) {
-			que.push({it->second, it->first });
-		}
+  vector<int> topKFrequent(vector<int>& nums, int k) {
+    vector<int> res;
+    if (nums.empty())
+      return res;
+    
+    unordered_map<int, int> mp;
+    for (auto v : nums) {
+      mp[v]++;
+    }
+    if (k > mp.size())
+      return res;
+    priority_queue<pair<int, int>> que; // 使用优先队列（基于红黑树实现，队头元素top最大）
+    
+    // 按元素出现频次进行排序
+    for (auto it = mp.begin(); it != mp.end(); it++) {
+      que.push({it->second, it->first });
+    }
 
-		// 队首存放的是次数最多的元素
-		while (k--) {
-			res.push_back(que.top().second);
-			que.pop();
-		}
-		return res;
-	}
+    // 队首存放的是次数最多的元素
+    while (k--) {
+      res.push_back(que.top().second);
+      que.pop();
+    }
+    return res;
+  }
 };
 
 /** 347. Top K Frequent Elements
@@ -194,25 +193,25 @@ public:
  */
 class Solution347 {
 public:
-	vector<int> topKFrequent(vector<int>& nums, int k) {
-		map<int, int> m;
-		vector<vector<int>> bucket(nums.size() + 1);
-		vector<int> res;
-		for (auto a : nums) 
-			++m[a];
+  vector<int> topKFrequent(vector<int>& nums, int k) {
+    map<int, int> m;
+    vector<vector<int>> bucket(nums.size() + 1);
+    vector<int> res;
+    for (auto a : nums) 
+      ++m[a];
 
-		for (auto it : m) {
-			bucket[it.second].push_back(it.first);
-		}
-		for (int i = nums.size(); i >= 0; --i) {
-			for (int j = 0; j < bucket[i].size(); ++j) {
-				res.push_back(bucket[i][j]);
-				if (res.size() == k) 
-					return res;
-			}
-		}
-		return res;
-	}
+    for (auto it : m) {
+      bucket[it.second].push_back(it.first);
+    }
+    for (int i = nums.size(); i >= 0; --i) {
+      for (int j = 0; j < bucket[i].size(); ++j) {
+        res.push_back(bucket[i][j]);
+        if (res.size() == k) 
+          return res;
+      }
+    }
+    return res;
+  }
 };
 
 /** 题目 169. Majority Element
@@ -227,41 +226,41 @@ public:
  */
 class Solution12 {
 public:
-	int majorityElement(vector<int>& nums) {
-		if (nums.empty())
-			return -1;
-		int N = nums.size();
-		int low = 0, high = N - 1;
-		
-		while (low <= high) {
-			int mid = partition(nums, low, high);
-			if (mid == N / 2)  // mid 处于正中间位置，则一定是出现次数超过一半的那个元素
-				return nums[mid];
-			else if (mid < N / 2) {
-				low = mid + 1;
-			}
-			else
-				high = mid - 1;
-		}
-		// 这里还需要检查mid代表的元素出现次数是否超过一半
-		return -1;
-	}
+  int majorityElement(vector<int>& nums) {
+    if (nums.empty())
+      return -1;
+    int N = nums.size();
+    int low = 0, high = N - 1;
+    
+    while (low <= high) {
+      int mid = partition(nums, low, high);
+      if (mid == N / 2)  // mid 处于正中间位置，则一定是出现次数超过一半的那个元素
+        return nums[mid];
+      else if (mid < N / 2) {
+        low = mid + 1;
+      }
+      else
+        high = mid - 1;
+    }
+    // 这里还需要检查mid代表的元素出现次数是否超过一半
+    return -1;
+  }
 
-	int partition(vector<int> &num, int low, int high) {
-		// int low = 0, high = num.size() - 1;
-		int pivot = num[low];
-		while (low < high) {
-			while (low < high && pivot <= num[high])
-				high--;
-			num[low] = num[high];
+  int partition(vector<int> &num, int low, int high) {
+    // int low = 0, high = num.size() - 1;
+    int pivot = num[low];
+    while (low < high) {
+      while (low < high && pivot <= num[high])
+        high--;
+      num[low] = num[high];
 
-			while (low < high && pivot > num[low])
-				low++;
-			num[high] = num[low];
-		}
-		num[low] = pivot;
-		return low;
-	}
+      while (low < high && pivot > num[low])
+        low++;
+      num[high] = num[low];
+    }
+    num[low] = pivot;
+    return low;
+  }
 };
 
 // 另一种解法：
@@ -272,27 +271,27 @@ public:
 // 如果 majority 存在，则经过抵消和增加之后，cnt一定>=1;
 class Solution13 {
 public:
-	int majorityElement(vector<int>& nums) {
-		if (nums.empty())
-			return -1;
-	
-		int cnt = 1;
-		int curElem = nums[0]; // 选择第一个元素用于和其他元素相抵消
-		for (int i = 1; i < nums.size(); i++) {
-			if (cnt != 0) {
-				if (curElem == nums[i]) 
-					cnt++;
-				else
-					cnt--;
-			}
-			else { // cnt == 0 时，需要重新选择当前元素并计数
-				curElem = nums[i];
-				cnt = 1;
-			}
-		}
-		// 还需要做一次验证，因为测试用例中可能不存在majority
-		return curElem; // 最终cnt>=1，此时经过抵消后，curElem即为出现次数过半的元素
-	}
+  int majorityElement(vector<int>& nums) {
+    if (nums.empty())
+      return -1;
+  
+    int cnt = 1;
+    int curElem = nums[0]; // 选择第一个元素用于和其他元素相抵消
+    for (int i = 1; i < nums.size(); i++) {
+      if (cnt != 0) {
+        if (curElem == nums[i]) 
+          cnt++;
+        else
+          cnt--;
+      }
+      else { // cnt == 0 时，需要重新选择当前元素并计数
+        curElem = nums[i];
+        cnt = 1;
+      }
+    }
+    // 还需要做一次验证，因为测试用例中可能不存在majority
+    return curElem; // 最终cnt>=1，此时经过抵消后，curElem即为出现次数过半的元素
+  }
 };
 
 
@@ -305,15 +304,15 @@ public:
  */
 class Solution287 {
 public:
-	int findDuplicate(vector<int>& nums) {
-		if (nums.size() == 0)
-			return 0;
-		int res = 0;
-		for (int i = 0; i < (int)nums.size(); i++) {
-			res ^= nums[i];
-		}
-		return res;
-	}
+  int findDuplicate(vector<int>& nums) {
+    if (nums.size() == 0)
+      return 0;
+    int res = 0;
+    for (int i = 0; i < (int)nums.size(); i++) {
+      res ^= nums[i];
+    }
+    return res;
+  }
 };
 
 /** 5. Longest Palindromic Substring 
@@ -324,32 +323,32 @@ public:
  */
 class Solution15 {
 public:
-	string longestPalindrome(string s) {
-		if (s.empty())
-			return string();
-		int len = s.length();
-		vector<vector<bool>> dp(len, vector<bool>(len));
+  string longestPalindrome(string s) {
+    if (s.empty())
+      return string();
+    int len = s.length();
+    vector<vector<bool>> dp(len, vector<bool>(len));
 
-		int maxLength = 0; // 用于记录最大子串的长度
-		int startIndex = 0; // 记录最大子串的起始位置
-		for (int i = 0; i < len; i++) {
-			for (int j = i + 1; j < len; j++) {
-				if (j - i <= 1)
-					dp[i][j] = (s[i] == s[j]);
-				else {
-					dp[i][j] = (s[i] == s[j]) && dp[i + 1][j - 1];
-				}
+    int maxLength = 0; // 用于记录最大子串的长度
+    int startIndex = 0; // 记录最大子串的起始位置
+    for (int i = 0; i < len; i++) {
+      for (int j = i + 1; j < len; j++) {
+        if (j - i <= 1)
+          dp[i][j] = (s[i] == s[j]);
+        else {
+          dp[i][j] = (s[i] == s[j]) && dp[i + 1][j - 1];
+        }
 
-				// 不断记录子串的长度
-				if (dp[i][j] && maxLength < j - i + 1) {
-					maxLength = j - i + 1;
-					startIndex = i;
-				}
-			}
-		}
-		// 返回最大子串
-		return s.substr(startIndex, maxLength);
-	}
+        // 不断记录子串的长度
+        if (dp[i][j] && maxLength < j - i + 1) {
+          maxLength = j - i + 1;
+          startIndex = i;
+        }
+      }
+    }
+    // 返回最大子串
+    return s.substr(startIndex, maxLength);
+  }
 };
 
 /** 53. Maximum Subarray
@@ -362,25 +361,25 @@ public:
  */
 class Solution53 {
 public:
-	int maxSubArray(vector<int>& nums) {
-		if (nums.empty())
-			return 0;
+  int maxSubArray(vector<int>& nums) {
+    if (nums.empty())
+      return 0;
 
-		int len = nums.size();
-		int curSum = 0; // 当前累加的和
-		int maxSum = INT_MIN;
+    int len = nums.size();
+    int curSum = 0; // 当前累加的和
+    int maxSum = INT_MIN;
 
-		for (int i = 0; i < len; i++) {
-			if (curSum < 0)
-				curSum = nums[i];
-			else {
-				curSum += nums[i]; // 记录当前累加和
-			}
-			if (curSum > maxSum)
-				maxSum = curSum;
-		}
-		return maxSum;
-	}
+    for (int i = 0; i < len; i++) {
+      if (curSum < 0)
+        curSum = nums[i];
+      else {
+        curSum += nums[i]; // 记录当前累加和
+      }
+      if (curSum > maxSum)
+        maxSum = curSum;
+    }
+    return maxSum;
+  }
 };
 
 /** 70. Climbing Stairs: 台阶问题
@@ -391,31 +390,31 @@ public:
  */
 class Solution70 {
 public:
-	int climbStairs(int n) {
-		if (n <= 1)
-			return n;
-		// 设f(i)表示爬i阶楼梯的方案个数，i：1~n
-		// f(i) = f(i-1)+f(i-2)  最后一步可以走一阶也可以走两阶
-		vector<int> f(n + 1);
-		f[1] = 1;
-		f[2] = 2;
-		for (int i = 3; i <= n; i++) {
-			f[i] = f[i - 1] + f[i - 2];
-		}
-		return f[n];
-	}
+  int climbStairs(int n) {
+    if (n <= 1)
+      return n;
+    // 设f(i)表示爬i阶楼梯的方案个数，i：1~n
+    // f(i) = f(i-1)+f(i-2)  最后一步可以走一阶也可以走两阶
+    vector<int> f(n + 1);
+    f[1] = 1;
+    f[2] = 2;
+    for (int i = 3; i <= n; i++) {
+      f[i] = f[i - 1] + f[i - 2];
+    }
+    return f[n];
+  }
 
-	int climbStairs2(int n) {
-		if (n <= 1) 
-			return n;
-		int f0 = 1, f1 = 0, f = 0;
-		for (int i = 2; i <= n; i++) {
-			f = f0 + f1;
-			f0 = f1;
-			f1 = f;
-		}
-		return f; 
-	}
+  int climbStairs2(int n) {
+    if (n <= 1) 
+      return n;
+    int f0 = 1, f1 = 0, f = 0;
+    for (int i = 2; i <= n; i++) {
+      f = f0 + f1;
+      f0 = f1;
+      f1 = f;
+    }
+    return f; 
+  }
 };
 
 /** 128. Longest Consecutive Sequence
@@ -426,39 +425,39 @@ public:
 */
 class Solution128 {
 public:
-	int longestConsecutive(vector<int>& nums) {
-		if (nums.empty())
-			return 0;
+  int longestConsecutive(vector<int>& nums) {
+    if (nums.empty())
+      return 0;
 
-		unordered_map<int, bool> used; // 用来表示数组中的元素是否被用过
-		for (auto v : nums)
-			used[v] = false;
+    unordered_map<int, bool> used; // 用来表示数组中的元素是否被用过
+    for (auto v : nums)
+      used[v] = false;
 
-		int maxLength = 0;
-		for (auto i : nums) {
-			if (used[i])
-				continue; // 如果元素已经使用过，则没必要再次使用
+    int maxLength = 0;
+    for (auto i : nums) {
+      if (used[i])
+        continue; // 如果元素已经使用过，则没必要再次使用
 
-			int len = 1; // 记录当前查找的序列的长度
-			used[i] = true;
+      int len = 1; // 记录当前查找的序列的长度
+      used[i] = true;
 
-			// 向右查找与元素i相邻的元素
-			for (int j = i + 1; used.find(j) != used.end(); j++) {
-				used[j] = true;
-				len++;
-			}
+      // 向右查找与元素i相邻的元素
+      for (int j = i + 1; used.find(j) != used.end(); j++) {
+        used[j] = true;
+        len++;
+      }
 
-			// 向左查找与元素i相邻的元素
-			for (int j = i - 1; used.find(j) != used.end(); j--) {
-				used[j] = true;
-				len++;
-			}
+      // 向左查找与元素i相邻的元素
+      for (int j = i - 1; used.find(j) != used.end(); j--) {
+        used[j] = true;
+        len++;
+      }
 
-			if (len > maxLength)
-				maxLength = len;
-		}
-		return maxLength;
-	}
+      if (len > maxLength)
+        maxLength = len;
+    }
+    return maxLength;
+  }
 };
 
 /** 234. Palindrome Linked List
@@ -469,63 +468,63 @@ public:
  */
 class Solution234 {
 public:
-	bool isPalindrome(ListNode* head) {
-		if (head == nullptr || head->next == nullptr)
-			return true;
+  bool isPalindrome(ListNode* head) {
+    if (head == nullptr || head->next == nullptr)
+      return true;
 
-		int len = 0;
-		ListNode *tmp = head;
-		while (tmp != nullptr) {
-			len++;
-			tmp = tmp->next;
-		}
+    int len = 0;
+    ListNode *tmp = head;
+    while (tmp != nullptr) {
+      len++;
+      tmp = tmp->next;
+    }
 
-		// 找到链表中心
-		tmp = head;
-		for (int i = 1; i <= (len - 1) / 2; i++) {
-			tmp = tmp->next;
-		}
-		// fast指向下标为(len-1)/2的结点
+    // 找到链表中心
+    tmp = head;
+    for (int i = 1; i <= (len - 1) / 2; i++) {
+      tmp = tmp->next;
+    }
+    // fast指向下标为(len-1)/2的结点
 
-		ListNode *head2 = tmp->next; // head2 指向链表的后半段
-		tmp->next = nullptr; // 前半段链表末尾置空
-		 
-		// head2指向的链表翻转
-		ListNode *revHead = Reverse(head2);
+    ListNode *head2 = tmp->next; // head2 指向链表的后半段
+    tmp->next = nullptr; // 前半段链表末尾置空
+     
+    // head2指向的链表翻转
+    ListNode *revHead = Reverse(head2);
 
-		// 前后两端链表对应元素比较
-		// 如果是偶数，前后两段链表的长度均为n/2，如果是奇数，则不考虑中间元素
-		// 前后比较的元素个数仍然为n/2个
-		for (int i = 0; i < len / 2; i++) {
-			if (head->val != revHead->val)
-				return false;
-			head = head->next;
-			revHead = revHead->next;
-		}
-		return true;
-	}
+    // 前后两端链表对应元素比较
+    // 如果是偶数，前后两段链表的长度均为n/2，如果是奇数，则不考虑中间元素
+    // 前后比较的元素个数仍然为n/2个
+    for (int i = 0; i < len / 2; i++) {
+      if (head->val != revHead->val)
+        return false;
+      head = head->next;
+      revHead = revHead->next;
+    }
+    return true;
+  }
 
-	// 翻转链表
-	ListNode* Reverse(ListNode *head) {
-		if (head == nullptr || head->next == nullptr)
-			return head; // 只有一个结点，返回head自身
+  // 翻转链表
+  ListNode* Reverse(ListNode *head) {
+    if (head == nullptr || head->next == nullptr)
+      return head; // 只有一个结点，返回head自身
 
-		ListNode *pcur = head->next;
-		ListNode *pre = head;
+    ListNode *pcur = head->next;
+    ListNode *pre = head;
 
-		ListNode *pnext = nullptr;
+    ListNode *pnext = nullptr;
 
-		while (pcur != nullptr) {
-			pnext = pcur->next;
-			pcur->next = pre;
+    while (pcur != nullptr) {
+      pnext = pcur->next;
+      pcur->next = pre;
 
-			pre = pcur;
-			pcur = pnext;
-		}
-		// 此时pre指向翻转后的链表首结点
-		head->next = nullptr;
-		return pre;
-	}
+      pre = pcur;
+      pcur = pnext;
+    }
+    // 此时pre指向翻转后的链表首结点
+    head->next = nullptr;
+    return pre;
+  }
 };
 
 /** 647. Palindromic Substrings
@@ -536,26 +535,26 @@ public:
  */
 class Solution647 {
 private:
-	int cnt = 0;
+  int cnt = 0;
 public:
-	int countSubstrings(string s) {
-		if (s.empty())
-			return 0;
-		for (int i = 0; i < s.length(); i++) {
-			HuiwenSubstring(s, i, i); // 奇数长度扩展
-			HuiwenSubstring(s, i, i + 1); // 偶数长度扩展,如‘abba’
-		}
-		return cnt;
-	}
+  int countSubstrings(string s) {
+    if (s.empty())
+      return 0;
+    for (int i = 0; i < s.length(); i++) {
+      HuiwenSubstring(s, i, i); // 奇数长度扩展
+      HuiwenSubstring(s, i, i + 1); // 偶数长度扩展,如‘abba’
+    }
+    return cnt;
+  }
 
-	// 判断回文的函数
-	void HuiwenSubstring(string &s, int left, int right) {
-		while (left >= 0 && right < s.length() && s[left] == s[right]) {
-			cnt++;
-			left--; // 向左右扩展字符串
-			right++;
-		}
-	}
+  // 判断回文的函数
+  void HuiwenSubstring(string &s, int left, int right) {
+    while (left >= 0 && right < s.length() && s[left] == s[right]) {
+      cnt++;
+      left--; // 向左右扩展字符串
+      right++;
+    }
+  }
 
 };
 
@@ -569,38 +568,38 @@ public:
  */
 class Solution19 {
 public:
-	ListNode* removeNthFromEnd(ListNode* head, int n) {
-		if (head == nullptr)
-			return nullptr;
+  ListNode* removeNthFromEnd(ListNode* head, int n) {
+    if (head == nullptr)
+      return nullptr;
 
-		ListNode *p1 = head;
-		for (int i = 1; i <= n - 1 && p1 != nullptr; i++) { // p1 起始为第一个结点，向后移动 n-1 步
-			p1 = p1->next;
-		}
-		if (p1 == nullptr) // 说明结点的个数小于 n
-			return nullptr;
+    ListNode *p1 = head;
+    for (int i = 1; i <= n - 1 && p1 != nullptr; i++) { // p1 起始为第一个结点，向后移动 n-1 步
+      p1 = p1->next;
+    }
+    if (p1 == nullptr) // 说明结点的个数小于 n
+      return nullptr;
 
-		// 否则说明p1此时指向正向第 n 个结点
-		ListNode *p2 = head;
-		ListNode *pre = nullptr; // 用于记录 p2 结点的前一个结点 
-		while (p1->next != nullptr) { // p1向后移动 len-n 个结点
-			p1 = p1->next;
-			pre = p2;
-			p2 = p2->next;
-		}
-		// 此时 p2 即为反向第 n 个结点, pre指向 p2 的前一个结点，反向第n+1个结点
-		if (p2 == head) { // 如果待删除的结点为首结点head
-			head = p2->next;
-			delete p2;
-			p2 = nullptr;
-		}
-		else {
-			pre->next = p2->next;
-			delete p2;
-			p2 = nullptr;
-		}
-		return head;
-	}
+    // 否则说明p1此时指向正向第 n 个结点
+    ListNode *p2 = head;
+    ListNode *pre = nullptr; // 用于记录 p2 结点的前一个结点 
+    while (p1->next != nullptr) { // p1向后移动 len-n 个结点
+      p1 = p1->next;
+      pre = p2;
+      p2 = p2->next;
+    }
+    // 此时 p2 即为反向第 n 个结点, pre指向 p2 的前一个结点，反向第n+1个结点
+    if (p2 == head) { // 如果待删除的结点为首结点head
+      head = p2->next;
+      delete p2;
+      p2 = nullptr;
+    }
+    else {
+      pre->next = p2->next;
+      delete p2;
+      p2 = nullptr;
+    }
+    return head;
+  }
 };
 
 /** 136. Single Number, easy
@@ -611,16 +610,16 @@ public:
  */
 class Solution136 {
 public:
-	int singleNumber(vector<int>& nums) {
-		if (nums.empty())
-			return 0;
+  int singleNumber(vector<int>& nums) {
+    if (nums.empty())
+      return 0;
 
-		int res = 0; // 0^anyNum = anyNum
-		for (int n : nums) {
-			res = res ^ n;
-		}
-		return res;
-	}
+    int res = 0; // 0^anyNum = anyNum
+    for (int n : nums) {
+      res = res ^ n;
+    }
+    return res;
+  }
 };
 
 // 排列组合类题目
@@ -632,36 +631,36 @@ public:
  */
 class Solution46 {
 public:
-	vector<vector<int>> permute(vector<int>& nums) {
-		vector<vector<int>> res; // 存放结果
-		if (nums.empty())
-			return res;
-		
-		permutation(nums, 0, res);
+  vector<vector<int>> permute(vector<int>& nums) {
+    vector<vector<int>> res; // 存放结果
+    if (nums.empty())
+      return res;
+    
+    permutation(nums, 0, res);
 
-		return res;
-	}
+    return res;
+  }
 
-	/* 核心函数
-	 * 参数：nums，数组；res：存放所有的排列；begin：当前排列时第一个元素的下标
-	 */
-	void permutation(vector<int> &nums, int begin, vector<vector<int>> &res) {
-		if (begin == nums.size()-1) { //如果遍历到最后一个元素，则把此次排列存入 res 中
-			res.push_back(nums); // 因为这里是使用nums本身进行排列，故不需要return;
-		}
-		else {
-			// 依次把后面元素跟第一个位置的元素交换
-			for (int i = begin; i < nums.size(); i++) {
-				swap(nums[begin], nums[i]);
-				//递归的对 begin 后面的元素进行排列
-				permutation(nums, begin + 1, res);
+  /* 核心函数
+   * 参数：nums，数组；res：存放所有的排列；begin：当前排列时第一个元素的下标
+   */
+  void permutation(vector<int> &nums, int begin, vector<vector<int>> &res) {
+    if (begin == nums.size()-1) { //如果遍历到最后一个元素，则把此次排列存入 res 中
+      res.push_back(nums); // 因为这里是使用nums本身进行排列，故不需要return;
+    }
+    else {
+      // 依次把后面元素跟第一个位置的元素交换
+      for (int i = begin; i < nums.size(); i++) {
+        swap(nums[begin], nums[i]);
+        //递归的对 begin 后面的元素进行排列
+        permutation(nums, begin + 1, res);
 
-				// 排列后需要把原来的交换的元素再交换回来
-				swap(nums[begin], nums[i]);
-				// 开始下次循环，即使用下一个数作为首元素，再次进行排列
-			}
-		}	
-	}
+        // 排列后需要把原来的交换的元素再交换回来
+        swap(nums[begin], nums[i]);
+        // 开始下次循环，即使用下一个数作为首元素，再次进行排列
+      }
+    }  
+  }
 
 };
 
@@ -674,36 +673,36 @@ public:
  */
 class Solution77 {
 public:
-	vector<vector<int>> combine(int n, int k) {
-		vector<vector<int>> res;
+  vector<vector<int>> combine(int n, int k) {
+    vector<vector<int>> res;
 
-		if (n <= 0 || k > n)
-			return res;
+    if (n <= 0 || k > n)
+      return res;
 
-		vector<int> cur; // 当前组合
-		combination(res, cur, n, k, 1); // 组合中的数字范围为：1~n
+    vector<int> cur; // 当前组合
+    combination(res, cur, n, k, 1); // 组合中的数字范围为：1~n
 
-		return res;
-	}
-	// 组合的核心函数
-	// begin：表示组合的起始元素。即求出从 begin 开始的元素
-	void combination(vector<vector<int>> &res, vector<int> &cur, int n, int k, int begin) {
-		if (cur.size() == k) { // 回溯的终止条件：找到一种组合后函数返回
-			res.push_back(cur);
-			return;
-		}
+    return res;
+  }
+  // 组合的核心函数
+  // begin：表示组合的起始元素。即求出从 begin 开始的元素
+  void combination(vector<vector<int>> &res, vector<int> &cur, int n, int k, int begin) {
+    if (cur.size() == k) { // 回溯的终止条件：找到一种组合后函数返回
+      res.push_back(cur);
+      return;
+    }
 
-		// 先确定首元素 i, 求出以 i 开头的组合
-		for (int i = begin; i <= n; i++) {
-			cur.push_back(i);
+    // 先确定首元素 i, 求出以 i 开头的组合
+    for (int i = begin; i <= n; i++) {
+      cur.push_back(i);
 
-			// 递归
-			combination(res, cur, n, k, i + 1); //确定了首元素 i, 然后对i之后的元素进行组合
-	        
-			// 回溯后，删除当前for循环中添加的元素（line717），此时cur = [],下一次 fo r循环中将选择新的首元素
-			cur.pop_back(); 
-		}
-	}
+      // 递归
+      combination(res, cur, n, k, i + 1); //确定了首元素 i, 然后对i之后的元素进行组合
+          
+      // 回溯后，删除当前for循环中添加的元素（line717），此时cur = [],下一次 fo r循环中将选择新的首元素
+      cur.pop_back(); 
+    }
+  }
 };
 
 /** 617. Merge Two Binary Trees
@@ -714,23 +713,23 @@ public:
 */
 class Solution617 {
 public:
-	TreeNode* mergeTrees(TreeNode* t1, TreeNode* t2) {
-		if (t1 == nullptr && t2 != nullptr)
-			return t2;
-		else if (t2 == nullptr && t1 != nullptr)
-			return t1;
-		else if (t1 == nullptr && t2 == nullptr)
-			return nullptr;
+  TreeNode* mergeTrees(TreeNode* t1, TreeNode* t2) {
+    if (t1 == nullptr && t2 != nullptr)
+      return t2;
+    else if (t2 == nullptr && t1 != nullptr)
+      return t1;
+    else if (t1 == nullptr && t2 == nullptr)
+      return nullptr;
 
-		TreeNode *root = new TreeNode(0);
-		root->val = t1->val + t2->val; // 合并根结点
+    TreeNode *root = new TreeNode(0);
+    root->val = t1->val + t2->val; // 合并根结点
 
-		// 递归对左子树和右子树进行合并
-		root->left = mergeTrees(t1->left, t2->left);
-		root->right = mergeTrees(t1->right, t2->right);
+    // 递归对左子树和右子树进行合并
+    root->left = mergeTrees(t1->left, t2->left);
+    root->right = mergeTrees(t1->right, t2->right);
 
-		return root;
-	}
+    return root;
+  }
 };
 
 /** 113. Path Sum II
@@ -741,37 +740,37 @@ public:
  */
 class Solution113 {
 public:
-	vector<vector<int>> pathSum(TreeNode* root, int sum) {
-		vector<vector<int>> res;
-		if (root == nullptr)
-			return res;
-		
-		vector<int> cur;
-		FindPath(root, res, cur, sum);
+  vector<vector<int>> pathSum(TreeNode* root, int sum) {
+    vector<vector<int>> res;
+    if (root == nullptr)
+      return res;
+    
+    vector<int> cur;
+    FindPath(root, res, cur, sum);
 
-		return res;
-	}
+    return res;
+  }
 
-	// 递归函数
-	void FindPath(TreeNode *root, vector<vector<int>> &res, vector<int> &cur, int sum) {
-		if (root == nullptr)
-			return;
+  // 递归函数
+  void FindPath(TreeNode *root, vector<vector<int>> &res, vector<int> &cur, int sum) {
+    if (root == nullptr)
+      return;
 
-		cur.push_back(root->val);  // 先存入根结点
-		
-		if (root->left == nullptr && root->right == nullptr) { // 到达叶子结点后，当前路径已近确定，判断其路径和
-			if (accumulate(cur.begin(), cur.end(), 0) == sum)
-				res.push_back(cur);
-		} else {
-			if (root->left != nullptr) 
-				FindPath(root->left, res, cur, sum);
-			if (root->right != nullptr)
-				FindPath(root->right, res, cur, sum);
-		}
+    cur.push_back(root->val);  // 先存入根结点
+    
+    if (root->left == nullptr && root->right == nullptr) { // 到达叶子结点后，当前路径已近确定，判断其路径和
+      if (accumulate(cur.begin(), cur.end(), 0) == sum)
+        res.push_back(cur);
+    } else {
+      if (root->left != nullptr) 
+        FindPath(root->left, res, cur, sum);
+      if (root->right != nullptr)
+        FindPath(root->right, res, cur, sum);
+    }
 
-		// 回溯后，删除当前存入的结点
-		cur.pop_back();
-	}
+    // 回溯后，删除当前存入的结点
+    cur.pop_back();
+  }
 };
 
 //----------- Dynamic Programming examples -----------
@@ -786,37 +785,37 @@ public:
 */
 class Solution120 {
 public:
-	int minimumTotal(vector<vector<int>>& triangle) {
-		if (triangle.empty())
-			return 0;
+  int minimumTotal(vector<vector<int>>& triangle) {
+    if (triangle.empty())
+      return 0;
 
-		int row = triangle.size();
-		vector<vector<int>> dp(row, vector<int>(row)); // 默认初值为0
+    int row = triangle.size();
+    vector<vector<int>> dp(row, vector<int>(row)); // 默认初值为0
 
-		// 动态表赋初值
-		dp[0][0] = triangle[0][0]; // 第一行只有一个数
+    // 动态表赋初值
+    dp[0][0] = triangle[0][0]; // 第一行只有一个数
 
-		for (int i = 1; i < row; i++) {
-			for (int j = 0; j < row; j++) {
-				if (j == 0) // 对于第一列，(i,j)的前一个落点只能是(i-1,j)
-					dp[i][j] = dp[i - 1][j] + triangle[i][j];
-				else if (j == triangle[i].size() - 1) // 当前行的最后一列
-					dp[i][j] = dp[i - 1][j - 1] + triangle[i][j];
-				else
-					dp[i][j] = min(dp[i - 1][j - 1], dp[i - 1][j]) + triangle[i][j];
+    for (int i = 1; i < row; i++) {
+      for (int j = 0; j < row; j++) {
+        if (j == 0) // 对于第一列，(i,j)的前一个落点只能是(i-1,j)
+          dp[i][j] = dp[i - 1][j] + triangle[i][j];
+        else if (j == triangle[i].size() - 1) // 当前行的最后一列
+          dp[i][j] = dp[i - 1][j - 1] + triangle[i][j];
+        else
+          dp[i][j] = min(dp[i - 1][j - 1], dp[i - 1][j]) + triangle[i][j];
 
-			}
-		}
-	
-		// dp[row-1][j]存放着从（0,0）到最后一层各点的最短路径
-		int minimum = dp[row - 1][0];
-		for (int i = 1; i < row; i++) {
-			if (dp[row - 1][i] < minimum)
-				minimum = dp[row - 1][i];
-		}
+      }
+    }
+  
+    // dp[row-1][j]存放着从（0,0）到最后一层各点的最短路径
+    int minimum = dp[row - 1][0];
+    for (int i = 1; i < row; i++) {
+      if (dp[row - 1][i] < minimum)
+        minimum = dp[row - 1][i];
+    }
 
-		return minimum;
-	}
+    return minimum;
+  }
 };
 
 /** 64. Minimum Path Sum
@@ -827,31 +826,31 @@ public:
  */
 class Solution64 {
 public:
-	int minPathSum(vector<vector<int>>& grid) {
-		if (grid.empty() || grid[0].empty())
-			return 0;
-		int row = grid.size();
-		int col = grid[0].size();
+  int minPathSum(vector<vector<int>>& grid) {
+    if (grid.empty() || grid[0].empty())
+      return 0;
+    int row = grid.size();
+    int col = grid[0].size();
 
-		vector<vector<int>> dp(row, vector<int>(col));
+    vector<vector<int>> dp(row, vector<int>(col));
 
-		// dp[0][0] = grid[0][0];
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
-				if (i == 0 && j == 0)
-					dp[i][j] = grid[i][j];
-				else if (j == 0 && i >= 1) // 第一列
-					dp[i][j] = dp[i - 1][j] + grid[i][j];
-				else if (i == 0 && j >= 1) // 计算第一行
-					dp[i][j] = dp[i][j - 1] + grid[i][j];
-				else {
-					dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
-				}
-			}
-		}
+    // dp[0][0] = grid[0][0];
+    for (int i = 0; i < row; i++) {
+      for (int j = 0; j < col; j++) {
+        if (i == 0 && j == 0)
+          dp[i][j] = grid[i][j];
+        else if (j == 0 && i >= 1) // 第一列
+          dp[i][j] = dp[i - 1][j] + grid[i][j];
+        else if (i == 0 && j >= 1) // 计算第一行
+          dp[i][j] = dp[i][j - 1] + grid[i][j];
+        else {
+          dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+        }
+      }
+    }
 
-		return dp[row - 1][col - 1];
-	}	
+    return dp[row - 1][col - 1];
+  }  
 };
 
 /** 63. Unique Paths II: 带有障碍物，求路径个数
@@ -862,39 +861,39 @@ public:
  */
 class Solution63 {
 public:
-	int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
-		// 边界条件
-		if (obstacleGrid.empty() || obstacleGrid[0].empty())
-			return 0;
+  int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+    // 边界条件
+    if (obstacleGrid.empty() || obstacleGrid[0].empty())
+      return 0;
 
-		int row = obstacleGrid.size();
-		int col = obstacleGrid[0].size();
+    int row = obstacleGrid.size();
+    int col = obstacleGrid[0].size();
 
-		vector<vector<int>> dp(row, vector<int>(col));
-		// 确定初值
-		dp[0][0] = obstacleGrid[0][0] == 0 ? 1 : 0; // 有障碍时，路径个数为0
+    vector<vector<int>> dp(row, vector<int>(col));
+    // 确定初值
+    dp[0][0] = obstacleGrid[0][0] == 0 ? 1 : 0; // 有障碍时，路径个数为0
 
-		// 第一列上的点只能向下走,注意障碍物
-		for (int i = 1; i < row; i++) {
-			dp[i][0] = (dp[i - 1][0] == 1 && obstacleGrid[i][0] == 0) ? 1 : 0; // 如果上一个点有路径，且当前点无障碍，则dp[i][0] = 1
-		}
+    // 第一列上的点只能向下走,注意障碍物
+    for (int i = 1; i < row; i++) {
+      dp[i][0] = (dp[i - 1][0] == 1 && obstacleGrid[i][0] == 0) ? 1 : 0; // 如果上一个点有路径，且当前点无障碍，则dp[i][0] = 1
+    }
 
-		// 第一行上的点只能向右走,注意障碍物
-		for (int j = 1; j < col; j++) {
-			dp[0][j] = (dp[0][j - 1] == 1 && obstacleGrid[0][j] == 0) ? 1 : 0; // 如果上一个点有路径，且当前点无障碍，则dp[0][j] = 1
-		}
+    // 第一行上的点只能向右走,注意障碍物
+    for (int j = 1; j < col; j++) {
+      dp[0][j] = (dp[0][j - 1] == 1 && obstacleGrid[0][j] == 0) ? 1 : 0; // 如果上一个点有路径，且当前点无障碍，则dp[0][j] = 1
+    }
 
-		// 其它点的递推公式
-		for (int i = 1; i < row; i++) {
-			for (int j = 1; j < col; j++) {
-				if (obstacleGrid[i][j] == 1)
-					dp[i][j] = 0;
-				else
-					dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
-			}
-		}
-		return dp[row - 1][col - 1];
-	}
+    // 其它点的递推公式
+    for (int i = 1; i < row; i++) {
+      for (int j = 1; j < col; j++) {
+        if (obstacleGrid[i][j] == 1)
+          dp[i][j] = 0;
+        else
+          dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+      }
+    }
+    return dp[row - 1][col - 1];
+  }
 };
 
 /** 69. Sqrt(x): 求平方根
@@ -905,37 +904,37 @@ public:
  */
 class Solution69 {
 public:
-	int mySqrt(int x) {
-		if (x <= 1)
-			return x;
+  int mySqrt(int x) {
+    if (x <= 1)
+      return x;
 
-		int low = 1, high = x; // 对于大于1的正数，显然sqrt(x) < x
-		int mid;
-		while (low <= high) {
-			mid = (low + high) / 2;
-			if (mid * mid == x)
-				return mid;
-			else if (mid * mid < x)
-				low = mid + 1;
-			else high = mid - 1;
-		}
-		return high;
-	}
+    int low = 1, high = x; // 对于大于1的正数，显然sqrt(x) < x
+    int mid;
+    while (low <= high) {
+      mid = (low + high) / 2;
+      if (mid * mid == x)
+        return mid;
+      else if (mid * mid < x)
+        low = mid + 1;
+      else high = mid - 1;
+    }
+    return high;
+  }
 };
 
 // 牛顿迭代法： Xi+1 = Xi - F(Xi)/F'(Xi);
 // 求x = sqrt(n), 相当于求x^2-n = 0, 令fx = x^2 - n ，可推导出 迭代公式 Xi+1 = (Xi + n/Xi)/2;
 int sqrt2(int x) {
-	if (x <= 1)
-		return x;
-	int s0 = 0, s1 = 1; //迭代初始值
+  if (x <= 1)
+    return x;
+  int s0 = 0, s1 = 1; //迭代初始值
 
-	while (abs(s1 - s0) > 1.0e-6) {
-		// 不满足精度，接着迭代求解
-		s0 = s1;
-		s1 = (s0 + x / s0) / 2;
-	}
-	return s0;
+  while (abs(s1 - s0) > 1.0e-6) {
+    // 不满足精度，接着迭代求解
+    s0 = s1;
+    s1 = (s0 + x / s0) / 2;
+  }
+  return s0;
 }
 
 /** 135.Candy(贪心法实例)
@@ -949,32 +948,32 @@ int sqrt2(int x) {
  */
 class Solution135 {
 public:
-	int candy(vector<int>& ratings) {
-		if (ratings.empty())
-			return 0;
+  int candy(vector<int>& ratings) {
+    if (ratings.empty())
+      return 0;
 
-		int N = ratings.size();
-		vector<int> candy(N, 1); // 每个人至少一块糖果
+    int N = ratings.size();
+    vector<int> candy(N, 1); // 每个人至少一块糖果
 
-		// 从左向右扫描，找右侧等级高的孩子
-		for (int i = 0; i < N-1; i++) {
-			if (ratings[i] < ratings[i + 1])
-				candy[i + 1] = candy[i] + 1;
-		}
+    // 从左向右扫描，找右侧等级高的孩子
+    for (int i = 0; i < N-1; i++) {
+      if (ratings[i] < ratings[i + 1])
+        candy[i + 1] = candy[i] + 1;
+    }
 
-		// 从右向左扫描,找左侧等级高的孩子
-		for (int i = N - 1; i >= 1; i--) {
-			if (ratings[i - 1] > ratings[i] && candy[i - 1] <= candy[i])
-				candy[i - 1] = candy[i] + 1;
-		}
+    // 从右向左扫描,找左侧等级高的孩子
+    for (int i = N - 1; i >= 1; i--) {
+      if (ratings[i - 1] > ratings[i] && candy[i - 1] <= candy[i])
+        candy[i - 1] = candy[i] + 1;
+    }
 
-		// 返回candy之和
-		int sum = 0;
-		for (int i : candy)
-			sum += i;
+    // 返回candy之和
+    int sum = 0;
+    for (int i : candy)
+      sum += i;
 
-		return sum;
-	}
+    return sum;
+  }
 };
 
 /** 55. Jump Game 跳跃游戏, 8ms
@@ -988,28 +987,28 @@ public:
  */
 class Solution55 {
 public:
-	bool canJump(vector<int>& nums) {
-		// 向量为空，返回false
-		if (nums.empty())
-			return false;
+  bool canJump(vector<int>& nums) {
+    // 向量为空，返回false
+    if (nums.empty())
+      return false;
 
-		int len = nums.size();
-		
-		int step = nums[0]; // 从第一个元素开始跳跃
+    int len = nums.size();
+    
+    int step = nums[0]; // 从第一个元素开始跳跃
 
-		for (int j = 1; j < len; j++) {
-			step--; // 每次都先跳跃一步，然后比较剩余步数 (step-1) 与新位置的步数 nums[j]
+    for (int j = 1; j < len; j++) {
+      step--; // 每次都先跳跃一步，然后比较剩余步数 (step-1) 与新位置的步数 nums[j]
 
-			if (step < 0) // 说明可跳跃步数 < 1，即连一步都无法跳跃
-				return false; 
+      if (step < 0) // 说明可跳跃步数 < 1，即连一步都无法跳跃
+        return false; 
 
-			//跳跃到新位置 j 
-			if (step < nums[j])
-				step = nums[j]; // 在新的位置上选择更大的步数向后移动
-		}
+      //跳跃到新位置 j 
+      if (step < nums[j])
+        step = nums[j]; // 在新的位置上选择更大的步数向后移动
+    }
 
-		return true;
-	}
+    return true;
+  }
 };
 
 /** 45. Jump Game II 跳跃游戏：求最少跳跃次数
@@ -1023,33 +1022,33 @@ public:
  */
 class Solution45 {
 public:
-	int jump(int A[], int n) {
-		if (n <= 1)
-			return 0;
+  int jump(int A[], int n) {
+    if (n <= 1)
+      return 0;
 
-		int step = 0; // 最少的跳跃次数
-		int cur = 0;  // 当前位置
-		int furthest = 0; // 用来存放从当前位置一次跳跃可到达的最远位置
+    int step = 0; // 最少的跳跃次数
+    int cur = 0;  // 当前位置
+    int furthest = 0; // 用来存放从当前位置一次跳跃可到达的最远位置
 
-		// 从 cur 位置起跳
-		while (cur < n) {
-			step++;  // 当前区间内跳跃一次
-			furthest = cur + A[cur];
-			if (furthest >= n - 1)
-				return step;
-			// 确定区间(cur, furthest]内的落点
-			int tmp = -1;
-			int index = 0;
-			for (int i = cur + 1; i <= furthest; i++) {
-				if (tmp < A[i] + i) {
-					tmp = A[i] + i;
-					index = i; // 记录当前位置
-				}
-			} // end for，此时index为区间内的落点
-			cur = index;
-		}
-		return -1; // 如果while内部没有返回step，则说明无法跳跃至终点
-	}
+    // 从 cur 位置起跳
+    while (cur < n) {
+      step++;  // 当前区间内跳跃一次
+      furthest = cur + A[cur];
+      if (furthest >= n - 1)
+        return step;
+      // 确定区间(cur, furthest]内的落点
+      int tmp = -1;
+      int index = 0;
+      for (int i = cur + 1; i <= furthest; i++) {
+        if (tmp < A[i] + i) {
+          tmp = A[i] + i;
+          index = i; // 记录当前位置
+        }
+      } // end for，此时index为区间内的落点
+      cur = index;
+    }
+    return -1; // 如果while内部没有返回step，则说明无法跳跃至终点
+  }
 };
 
 /** 83. Remove Duplicates from Sorted List(与剑指offer题目不完全相同)
@@ -1060,36 +1059,36 @@ public:
  */
 class Solution83 {
 public:
-	ListNode* deleteDuplicates(ListNode* head) {
-		if (head == nullptr)
-			return nullptr;
+  ListNode* deleteDuplicates(ListNode* head) {
+    if (head == nullptr)
+      return nullptr;
 
-		ListNode *newHead = new ListNode(0);
-		newHead->next = head;
+    ListNode *newHead = new ListNode(0);
+    newHead->next = head;
 
-		ListNode *pcur = head;
-		ListNode *pre = newHead; 
+    ListNode *pcur = head;
+    ListNode *pre = newHead; 
 
-		while (pcur != nullptr && pcur->next != nullptr) {
-			if (pcur->val == pcur->next->val) { // 若 pcur 指向重复元素, 则需要找到与该元素不重复的下一个元素
-				int tmp = pcur->val;
+    while (pcur != nullptr && pcur->next != nullptr) {
+      if (pcur->val == pcur->next->val) { // 若 pcur 指向重复元素, 则需要找到与该元素不重复的下一个元素
+        int tmp = pcur->val;
 
-				while (pcur != nullptr && pcur->val == tmp) {
-					pcur = pcur->next;
-				}
+        while (pcur != nullptr && pcur->val == tmp) {
+          pcur = pcur->next;
+        }
 
-				// pre是指向pcur前面非重复的结点，执行下面语句可把pre和pcur之间的重复结点删除
-				pre->next = pcur;
-				// pre = pcur, 加上此句可以保留一个重复元素，否则，删除所有重复元素
-			}
-			else { // pcur->val != pcur->next->val
-				pcur = pcur->next;
-				pre = pre->next; // pre 和 pcur 均向右移动
-			}
-		} // end while
-		
-		return newHead->next;
-	}
+        // pre是指向pcur前面非重复的结点，执行下面语句可把pre和pcur之间的重复结点删除
+        pre->next = pcur;
+        // pre = pcur, 加上此句可以保留一个重复元素，否则，删除所有重复元素
+      }
+      else { // pcur->val != pcur->next->val
+        pcur = pcur->next;
+        pre = pre->next; // pre 和 pcur 均向右移动
+      }
+    } // end while
+    
+    return newHead->next;
+  }
 };
 
 /** 3. Longest Substring Without Repeating Characters
@@ -1100,27 +1099,27 @@ public:
  */
 class Solution3 {
 public:
-	int lengthOfLongestSubstring(string s) {
-		int len = s.length();
-		set<char> st;
-		int maxLen = 0;
-		int left = 0,right = 0;
-	
-		while (right < len && left < len) {
-			if (st.find(s[right]) == st.end()) // 若s[right]在集合 st 中没有出现过，则将其加入集合
-			{
-				st.insert(s[right]);
-				right++;
-				maxLen = max(maxLen, right - left); // right-left即为当前集合中元素的个数
-			}
-			else { // 说明s[right]在st中已经出现过，则把结合中该重复元素及其之前的元素删除
-				st.erase(s[left]);
-				left++;
-			}
-		} 
+  int lengthOfLongestSubstring(string s) {
+    int len = s.length();
+    set<char> st;
+    int maxLen = 0;
+    int left = 0,right = 0;
+  
+    while (right < len && left < len) {
+      if (st.find(s[right]) == st.end()) // 若s[right]在集合 st 中没有出现过，则将其加入集合
+      {
+        st.insert(s[right]);
+        right++;
+        maxLen = max(maxLen, right - left); // right-left即为当前集合中元素的个数
+      }
+      else { // 说明s[right]在st中已经出现过，则把结合中该重复元素及其之前的元素删除
+        st.erase(s[left]);
+        left++;
+      }
+    } 
 
-		return maxLen;
-	}
+    return maxLen;
+  }
 };
 
 /**61. Rotate List: 要求把后面k个节点翻转到链表前面,如1-2-3-4-5-null, k = 2, res = 4-5-1-2-3-null
@@ -1133,32 +1132,32 @@ public:
  */
 class Solution61 {
 public:
-	ListNode* rotateRight(ListNode* head, int k) {
-		if (head == nullptr || k <= 0)
-			return nullptr;
+  ListNode* rotateRight(ListNode* head, int k) {
+    if (head == nullptr || k <= 0)
+      return nullptr;
 
-		// 1. 遍历求链表长度
-		int len = 0;
-		ListNode *pcur = head;
-		ListNode *pre = head;
-		while (pcur != nullptr) {
-			len++;
-			pre = pcur;
-			pcur = pcur->next;
-		}
-		pre->next = head; // 首尾连接
+    // 1. 遍历求链表长度
+    int len = 0;
+    ListNode *pcur = head;
+    ListNode *pre = head;
+    while (pcur != nullptr) {
+      len++;
+      pre = pcur;
+      pcur = pcur->next;
+    }
+    pre->next = head; // 首尾连接
 
-		// 2. 遍历前 len-k%len个结点,并断开连接
-		pcur = head; 
-		for (int i = 1; i < len - k%len; i++) {
-			pcur = pcur->next;
-		} // pcur指向第len-k%len个结点，其下一个结点为反向第k个结点
+    // 2. 遍历前 len-k%len个结点,并断开连接
+    pcur = head; 
+    for (int i = 1; i < len - k%len; i++) {
+      pcur = pcur->next;
+    } // pcur指向第len-k%len个结点，其下一个结点为反向第k个结点
 
-		ListNode *newHead = pcur->next;
-		pcur->next = nullptr;
+    ListNode *newHead = pcur->next;
+    pcur->next = nullptr;
 
-		return newHead;
-	}
+    return newHead;
+  }
 };
 
 /**剑指offer:最小的 K 个数
@@ -1172,24 +1171,24 @@ public:
  */
 class Solution112 {
 public:
-	vector<int> GetLeastNumbers_Solution(vector<int> input, int k) {
-		vector<int> res;
-		if (k <= 0 || k > input.size())
-			return res;
-		priority_queue<int> que;
+  vector<int> GetLeastNumbers_Solution(vector<int> input, int k) {
+    vector<int> res;
+    if (k <= 0 || k > input.size())
+      return res;
+    priority_queue<int> que;
 
-		for (int i = 0; i < input.size(); i++) {
-			que.push(input[i]);
-			if (que.size() == k + 1) // 前k+1个元素已经排好序（从大到小），其中队首最大，剩下的k个元素最小
-				que.pop(); // 出队，即删除队首
-		}
+    for (int i = 0; i < input.size(); i++) {
+      que.push(input[i]);
+      if (que.size() == k + 1) // 前k+1个元素已经排好序（从大到小），其中队首最大，剩下的k个元素最小
+        que.pop(); // 出队，即删除队首
+    }
 
-		while (!que.empty()) {
-			res.push_back(que.top());  // 依次出队
-			que.pop();
-		}
-		return res;
-	}
+    while (!que.empty()) {
+      res.push_back(que.top());  // 依次出队
+      que.pop();
+    }
+    return res;
+  }
 };
 
 /** 调整数组顺序使奇数位于偶数的前面
@@ -1202,23 +1201,23 @@ public:
  */
 class Solution111 {
 public:
-	void reOrderArray(vector<int> &array) {
-		if (array.empty())
-			return;
+  void reOrderArray(vector<int> &array) {
+    if (array.empty())
+      return;
 
-		deque<int> dq;
+    deque<int> dq;
 
-		int len = array.size();
+    int len = array.size();
 
-		for (int i = 0; i < len; i++) {
-			if (array[i] % 2 == 0) // 偶数放在dq的后面
-				dq.push_back(array[i]);
-			// 对于奇数，通过push_front，应该从数组末尾向前扫描，保证在队列中相对位置不变
-			if (array[len - i - 1] % 2 == 1)
-				dq.push_front(array[len - 1 - i]);
-		}
-		array.assign(dq.begin(), dq.end()); // assign函数用于赋值，可以用于不同容器但同类型元素的赋值
-	}
+    for (int i = 0; i < len; i++) {
+      if (array[i] % 2 == 0) // 偶数放在dq的后面
+        dq.push_back(array[i]);
+      // 对于奇数，通过push_front，应该从数组末尾向前扫描，保证在队列中相对位置不变
+      if (array[len - i - 1] % 2 == 1)
+        dq.push_front(array[len - 1 - i]);
+    }
+    array.assign(dq.begin(), dq.end()); // assign函数用于赋值，可以用于不同容器但同类型元素的赋值
+  }
 };
 
 /** 剑指offer题，把数组排列成最小的数
@@ -1229,35 +1228,35 @@ public:
  */
 class Solution114 {
 public:
-	string PrintMinNumber(vector<int> numbers) {
-		if (numbers.empty())
-			return "";
+  string PrintMinNumber(vector<int> numbers) {
+    if (numbers.empty())
+      return "";
 
-		// 1 数字转换成string
-		int len = numbers.size();
-		vector<string> strNum(len);
-		for (int i = 0; i < len; i++)
-		{
-			strNum[i] = to_string(numbers[i]);
-		}
-		// 2 按自定义规则排序
-		sort(strNum.begin(), strNum.end(), myCompare);
+    // 1 数字转换成string
+    int len = numbers.size();
+    vector<string> strNum(len);
+    for (int i = 0; i < len; i++)
+    {
+      strNum[i] = to_string(numbers[i]);
+    }
+    // 2 按自定义规则排序
+    sort(strNum.begin(), strNum.end(), myCompare);
 
-		// 3 拼接字符串
-		string res;
-		for (int i = 0; i < len; i++)
-			res += strNum[i];
+    // 3 拼接字符串
+    string res;
+    for (int i = 0; i < len; i++)
+      res += strNum[i];
 
-		return res;
-	}
-	// 使用 sort 算法进行排序式，需要自己定义排序规则，使得排序的 strNum 满足题目要求
-	// 对于两个字符串 A，B
-	// 若 AB < BA, 则应该把A放在前面，B放在后面，即认为 A“小于”B
-	// 若 AB > BA, 则应该把B放在前面, 认为 B "小于" A。
+    return res;
+  }
+  // 使用 sort 算法进行排序式，需要自己定义排序规则，使得排序的 strNum 满足题目要求
+  // 对于两个字符串 A，B
+  // 若 AB < BA, 则应该把A放在前面，B放在后面，即认为 A“小于”B
+  // 若 AB > BA, 则应该把B放在前面, 认为 B "小于" A。
 private:
-	static bool myCompare(const string &a, const string &b) { // 在类中自定义sort的比较函数，必须是static的
-		return a + b < b + a;
-	}
+  static bool myCompare(const string &a, const string &b) { // 在类中自定义sort的比较函数，必须是static的
+    return a + b < b + a;
+  }
 };
 
 /**
@@ -1269,33 +1268,33 @@ private:
  */
 class Solution116 {
 public:
-	int GetUglyNumber_Solutiion(int index) {
-		if (index < 1)
-			return 0;
+  int GetUglyNumber_Solutiion(int index) {
+    if (index < 1)
+      return 0;
 
-		vector<int> pre; // 用来存放已有的丑数(其中按顺序存放)
-		pre.push_back(1); // 1是第一个丑数
-		int i2 = 0, i3 = 0, i5 = 0;
-		// 下一个丑数 next = pre * 2||3||5，im记录的是乘以 m 的前一个丑数pre
-		int tmp;
+    vector<int> pre; // 用来存放已有的丑数(其中按顺序存放)
+    pre.push_back(1); // 1是第一个丑数
+    int i2 = 0, i3 = 0, i5 = 0;
+    // 下一个丑数 next = pre * 2||3||5，im记录的是乘以 m 的前一个丑数pre
+    int tmp;
 
-		while (pre.size() < index) {
-			tmp = min(pre[i2] * 2, min(pre[i3] * 3, pre[i5] * 5)); 
-			pre.push_back(tmp);
+    while (pre.size() < index) {
+      tmp = min(pre[i2] * 2, min(pre[i3] * 3, pre[i5] * 5)); 
+      pre.push_back(tmp);
 
-			// 找到是pre[i2]还是 pre[i3] 或者 pre[i5]，若tmp = pre[im]*m,则im之前的元素*2肯定小于tmp，故不需要再考虑
-			// 此时令im+1，其他的 im 不变（因为 pre[ik]*k 大于 tmp，k!=m，ik*k的值有可能是tmp后面的丑数，故ik不需要移动）;
-			// 下一次循环再次找出 pre[im]*m 的最小值做为下一个一个丑数
-			if (pre[i2] * 2 == tmp)
-				i2++;
-			if (pre[i3] * 3 == tmp)
-				i3++;
-			if (pre[i5] * 5 == tmp)
-				i5++;
-		}
-		// pre.size()==index
-		return pre[index - 1];
-	}
+      // 找到是pre[i2]还是 pre[i3] 或者 pre[i5]，若tmp = pre[im]*m,则im之前的元素*2肯定小于tmp，故不需要再考虑
+      // 此时令im+1，其他的 im 不变（因为 pre[ik]*k 大于 tmp，k!=m，ik*k的值有可能是tmp后面的丑数，故ik不需要移动）;
+      // 下一次循环再次找出 pre[im]*m 的最小值做为下一个一个丑数
+      if (pre[i2] * 2 == tmp)
+        i2++;
+      if (pre[i3] * 3 == tmp)
+        i3++;
+      if (pre[i5] * 5 == tmp)
+        i5++;
+    }
+    // pre.size()==index
+    return pre[index - 1];
+  }
 };
 
 /**
@@ -1308,27 +1307,27 @@ public:
  */
 class Solution_117 {
 public:
-	vector<int> multiply(const vector<int>& A) {
-	
-		int len = A.size();
-		if (len < 1)
-			return vector<int>();
+  vector<int> multiply(const vector<int>& A) {
+  
+    int len = A.size();
+    if (len < 1)
+      return vector<int>();
 
-		vector<int> B(len);
-		B[0] = 1;
-		int tmp = A[0];
-		for (int i = 1; i < len; i++) {
-			B[i] = tmp;
-			tmp *= A[i];
-		}
-		// 从后向前累乘
-		tmp = 1;
-		for (int i = len - 1; i >= 0; i--) {
-			B[i] *= tmp;
-			tmp *= A[i];
-		}
-		return B;
-	}
+    vector<int> B(len);
+    B[0] = 1;
+    int tmp = A[0];
+    for (int i = 1; i < len; i++) {
+      B[i] = tmp;
+      tmp *= A[i];
+    }
+    // 从后向前累乘
+    tmp = 1;
+    for (int i = len - 1; i >= 0; i--) {
+      B[i] *= tmp;
+      tmp *= A[i];
+    }
+    return B;
+  }
 };
 
 /**
@@ -1342,51 +1341,51 @@ public:
  */
 class Solution_51 {
 private:
-	vector<int> tmp; // 用于存放合并后的元素，避免在merge函数中递归的创建
-	int cnt = 0; // C++11运行类内初始化
+  vector<int> tmp; // 用于存放合并后的元素，避免在merge函数中递归的创建
+  int cnt = 0; // C++11运行类内初始化
 public:
-	int InversePairs(vector<int> data) {
-		if (data.size() <= 1)
-			return 0;
+  int InversePairs(vector<int> data) {
+    if (data.size() <= 1)
+      return 0;
 
-		tmp.resize(data.size());
-		int low = 0, high = data.size() - 1;
-		// cnt的累计在 merge 函数中进行
-		mergeSort(data, low, high);
+    tmp.resize(data.size());
+    int low = 0, high = data.size() - 1;
+    // cnt的累计在 merge 函数中进行
+    mergeSort(data, low, high);
 
-		return (cnt % 1000000007);
-	}
-	// 归并排序相关的函数
-	void mergeSort(vector<int> &data, int low, int high) {
-		if (low < high) {
-			int m = (low + high) / 2; //把序列分成两段，递归调用mergeSort
-			mergeSort(data, low, m);
-			mergeSort(data, m, high);
+    return (cnt % 1000000007);
+  }
+  // 归并排序相关的函数
+  void mergeSort(vector<int> &data, int low, int high) {
+    if (low < high) {
+      int m = (low + high) / 2; //把序列分成两段，递归调用mergeSort
+      mergeSort(data, low, m);
+      mergeSort(data, m, high);
 
-			//至此已经实现a[low~m]和a[m+1~high]有序
-			merge(data, low, m, high);
-		}
-	}
-	// 在合并子序列的过程中，统计逆序对的个数
-	void merge(vector<int> &a, int low, int mid, int high) {
-		int i = low, j = mid+1, k = low;
-		while (i <= mid && j <= high) {
-			if (a[i] <= a[j])
-				tmp[k++] = a[i++];
-			else {
-				tmp[k++] = a[j++];  // a[i] > a[j]，说明a[i...mid] 都大于 a[j]
-				this->cnt += mid - i + 1;
-			}		
-		}
-		while (i <= mid)
-			tmp[k++] = a[i++];
-		while (j <= high)
-			tmp[k++] = a[j++];
+      //至此已经实现a[low~m]和a[m+1~high]有序
+      merge(data, low, m, high);
+    }
+  }
+  // 在合并子序列的过程中，统计逆序对的个数
+  void merge(vector<int> &a, int low, int mid, int high) {
+    int i = low, j = mid+1, k = low;
+    while (i <= mid && j <= high) {
+      if (a[i] <= a[j])
+        tmp[k++] = a[i++];
+      else {
+        tmp[k++] = a[j++];  // a[i] > a[j]，说明a[i...mid] 都大于 a[j]
+        this->cnt += mid - i + 1;
+      }    
+    }
+    while (i <= mid)
+      tmp[k++] = a[i++];
+    while (j <= high)
+      tmp[k++] = a[j++];
 
-		// 把合并后的结果复制到原数组
-		for (k = low; k <= high; k++)
-			a[k] = tmp[k];
-	}
+    // 把合并后的结果复制到原数组
+    for (k = low; k <= high; k++)
+      a[k] = tmp[k];
+  }
 };
 
 /**
@@ -1398,50 +1397,50 @@ public:
  */
 class Solution_min_Stack {
 private:
-	stack<int> data, Min;
-	// data 栈用于存放数据，min 的栈顶用于存放最小元素
-	int minimum;
+  stack<int> data, Min;
+  // data 栈用于存放数据，min 的栈顶用于存放最小元素
+  int minimum;
 public:
-	void push(int value) {
-		if (data.empty() && Min.empty()) {
-			data.push(value);
-			Min.push(value);
-			minimum = value;
-		}
-		else {
-			if (value <= minimum) { // 
-				data.push(value);
-				Min.push(value);
-				minimum = value;
-			}
-			else {
-				data.push(value); 
-			}
-		}
-	} // end push
-	
-	void pop() {
-		if (!data.empty()) {
-			if (data.top() == Min.top()) {
-				data.pop();
-				Min.pop();
-			} else {
-				data.pop();
-			}	
-		}
-	}
-	
-	int top() {
-		if (data.empty())
-			return -1;
-		return data.top();
-	}
+  void push(int value) {
+    if (data.empty() && Min.empty()) {
+      data.push(value);
+      Min.push(value);
+      minimum = value;
+    }
+    else {
+      if (value <= minimum) { // 
+        data.push(value);
+        Min.push(value);
+        minimum = value;
+      }
+      else {
+        data.push(value); 
+      }
+    }
+  } // end push
+  
+  void pop() {
+    if (!data.empty()) {
+      if (data.top() == Min.top()) {
+        data.pop();
+        Min.pop();
+      } else {
+        data.pop();
+      }  
+    }
+  }
+  
+  int top() {
+    if (data.empty())
+      return -1;
+    return data.top();
+  }
 
-	int min() {
-		if (Min.empty())
-			return -1;
-		return Min.top();
-	}
+  int min() {
+    if (Min.empty())
+      return -1;
+    return Min.top();
+  }
 };
 
 /**
@@ -1452,70 +1451,70 @@ public:
  */
 class Solution_numeric_str {
 public:
-	bool isNumeric(char* string) {
-		if (string == nullptr || strlen(string))
-			return false;
+  bool isNumeric(char* string) {
+    if (string == nullptr || strlen(string))
+      return false;
 
-		int index = 0;
-		int len = strlen(string);
+    int index = 0;
+    int len = strlen(string);
 
-		// 1. 判断符号
-		if (string[index] == '+' || string[index] == '-')
-			index++;
+    // 1. 判断符号
+    if (string[index] == '+' || string[index] == '-')
+      index++;
 
-		//若只有符号位，则不是正确的数字
-		if (index == len) 
-			return false;
+    //若只有符号位，则不是正确的数字
+    if (index == len) 
+      return false;
 
-		// 2. 扫描数字部分
-		index = scanDigits(string, index);
-		if (index < strlen(string)) {
-			// 3. 如果有小数
-			if (string[index] == '.') {
-				index++;
-				index = scanDigits(string, index);
-				// 4. 如果有指数表示的形式
-				if (index < strlen(string)) {
-					if (string[index] == 'e' || string[index] == 'E') {
-						index++;
-						return isExponential(string, index);
-					}
-					return false;
-				}
-				return true;
-			}
-			else if (string[index] == 'e' || string[index] == 'E') {
-				//如果没有小数，且有指数形式
-				index++;
-				return isExponential(string, index);
-			}
-			return false;
-		}
-		return true;
-	}
+    // 2. 扫描数字部分
+    index = scanDigits(string, index);
+    if (index < strlen(string)) {
+      // 3. 如果有小数
+      if (string[index] == '.') {
+        index++;
+        index = scanDigits(string, index);
+        // 4. 如果有指数表示的形式
+        if (index < strlen(string)) {
+          if (string[index] == 'e' || string[index] == 'E') {
+            index++;
+            return isExponential(string, index);
+          }
+          return false;
+        }
+        return true;
+      }
+      else if (string[index] == 'e' || string[index] == 'E') {
+        //如果没有小数，且有指数形式
+        index++;
+        return isExponential(string, index);
+      }
+      return false;
+    }
+    return true;
+  }
 
-	bool isExponential(char *str, int index) {
-		if (index < strlen(str)) {
+  bool isExponential(char *str, int index) {
+    if (index < strlen(str)) {
 
-			//如果是符号，移动至下一个
-			if (str[index] == '+' || str[index] == '-') {
-				index++;
-			}
+      //如果是符号，移动至下一个
+      if (str[index] == '+' || str[index] == '-') {
+        index++;
+      }
 
-			index = scanDigits(str, index);
+      index = scanDigits(str, index);
 
-			if (index == strlen(str)) 
-				return true;
+      if (index == strlen(str)) 
+        return true;
 
-			return false;
-		}
-		return false;
-	}
-	int scanDigits(char *str, int index) {
-		while (index < strlen(str) && str[index] >= '0' && str[index] <= '9') 
-			index++;
-		return index;
-	}
+      return false;
+    }
+    return false;
+  }
+  int scanDigits(char *str, int index) {
+    while (index < strlen(str) && str[index] >= '0' && str[index] <= '9') 
+      index++;
+    return index;
+  }
 };
 
 /**
@@ -1530,46 +1529,46 @@ public:
  */
 class Solution239 {
 public:
-	vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-		// border cases 边界情况
-		if (nums.empty() || k > nums.size() || k <= 0)
-			return vector<int>();
+  vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+    // border cases 边界情况
+    if (nums.empty() || k > nums.size() || k <= 0)
+      return vector<int>();
 
-		deque<int> dq; // 队列中存放的下标
+    deque<int> dq; // 队列中存放的下标
 
-		vector<int> res;
+    vector<int> res;
 
-		int n = nums.size();
-		// 先将前 size 个元素入队：这是第一个窗口
-		// 举例：先入队2 3 4， 队列中的元素为：4(2,3小于4，被剔除)
+    int n = nums.size();
+    // 先将前 size 个元素入队：这是第一个窗口
+    // 举例：先入队2 3 4， 队列中的元素为：4(2,3小于4，被剔除)
 
-		int i = 0;
-		for (; i < k; i++) {
-			//新入队元素大于队尾，剔除队尾
-			while (!dq.empty() && nums[i] >= nums[dq.back()])
-				dq.pop_back();
+    int i = 0;
+    for (; i < k; i++) {
+      //新入队元素大于队尾，剔除队尾
+      while (!dq.empty() && nums[i] >= nums[dq.back()])
+        dq.pop_back();
 
-			dq.push_back(i);
-		} // 第一个窗口元素经过入队操作后，在队列中只剩下最大元素 4
+      dq.push_back(i);
+    } // 第一个窗口元素经过入队操作后，在队列中只剩下最大元素 4
 
-		res.push_back(nums[dq.front()]);
+    res.push_back(nums[dq.front()]);
 
-		// 对于下标i=size~n-1的元素，每个元素都是对应窗口的最后一个元素
-		// 除第一个窗口，剩下窗口个数为 n-size
-		for (int i = k; i < n; i++) {
-			// 首先判断当前队头是否处在当前窗口内
-			if (i - dq.front() >= k)
-				dq.pop_front();
-			while (!dq.empty() && nums[i] >= nums[dq.back()])
-				dq.pop_back();
-			dq.push_back(i);
+    // 对于下标i=size~n-1的元素，每个元素都是对应窗口的最后一个元素
+    // 除第一个窗口，剩下窗口个数为 n-size
+    for (int i = k; i < n; i++) {
+      // 首先判断当前队头是否处在当前窗口内
+      if (i - dq.front() >= k)
+        dq.pop_front();
+      while (!dq.empty() && nums[i] >= nums[dq.back()])
+        dq.pop_back();
+      dq.push_back(i);
 
-			// 队头为当前窗口最大值
-			res.push_back(nums[dq.front()]);
-		} //end for
+      // 队头为当前窗口最大值
+      res.push_back(nums[dq.front()]);
+    } //end for
 
-		return res;
-	}
+    return res;
+  }
 };
 
 /**
@@ -1588,35 +1587,35 @@ public:
  */
 class Solution_63 {
 private:
-	priority_queue<int, vector<int>, less<int>> maxHeap; // 默认大顶堆，即从大到小排序，队首top最大
-	priority_queue<int, vector<int>, greater<int>> minHeap; // 小顶堆(top最小)
-	int cnt = 0; // C++11里支持这种类内初始化
+  priority_queue<int, vector<int>, less<int>> maxHeap; // 默认大顶堆，即从大到小排序，队首top最大
+  priority_queue<int, vector<int>, greater<int>> minHeap; // 小顶堆(top最小)
+  int cnt = 0; // C++11里支持这种类内初始化
 public:
-	void Insert(int num) {
-		cnt++; // 统计当前读取的数据流个数
-		int tmp;
+  void Insert(int num) {
+    cnt++; // 统计当前读取的数据流个数
+    int tmp;
 
-		if (cnt % 2 == 0) { // 偶数位次放入到大顶堆中(需要先压入小顶堆，取出栈顶再放入大顶堆)
-			minHeap.push(num);
-			maxHeap.push(minHeap.top());
+    if (cnt % 2 == 0) { // 偶数位次放入到大顶堆中(需要先压入小顶堆，取出栈顶再放入大顶堆)
+      minHeap.push(num);
+      maxHeap.push(minHeap.top());
 
-			minHeap.pop();
-		}
-		else if (cnt % 2 == 1) {
-			maxHeap.push(num);
-			minHeap.push(maxHeap.top());
+      minHeap.pop();
+    }
+    else if (cnt % 2 == 1) {
+      maxHeap.push(num);
+      minHeap.push(maxHeap.top());
 
-			maxHeap.pop();
-		}
+      maxHeap.pop();
+    }
 
-	}
+  }
 
-	double GetMedian() {
-		if (cnt % 2 == 0)
-			return (minHeap.top() + maxHeap.top()) / 2.0;
-		else
-			return minHeap.top();
-	}
+  double GetMedian() {
+    if (cnt % 2 == 0)
+      return (minHeap.top() + maxHeap.top()) / 2.0;
+    else
+      return minHeap.top();
+  }
 
 };
 
@@ -1628,60 +1627,60 @@ public:
  */
 class Solution_64 {
 public:
-	int movingCount(int threshold, int rows, int cols) {
-		
-		vector<vector<bool>> isVisited(rows, vector<bool>(cols, false)); // 标记网格是否被访问过
+  int movingCount(int threshold, int rows, int cols) {
+    
+    vector<vector<bool>> isVisited(rows, vector<bool>(cols, false)); // 标记网格是否被访问过
 
-		int cnt = 0;
+    int cnt = 0;
 
-		if (threshold < 0 || rows <= 0 || cols <= 0) {
-			return cnt;
-		}
-		
-		cnt = backTracking(threshold, 0, 0, rows, cols, isVisited);
+    if (threshold < 0 || rows <= 0 || cols <= 0) {
+      return cnt;
+    }
+    
+    cnt = backTracking(threshold, 0, 0, rows, cols, isVisited);
 
-		return cnt;
-	}
+    return cnt;
+  }
 
-	// 回溯的核心函数
-	// 这里的 row 和 col表示当前的坐标
-	int backTracking(int threshold, int r, int c, int rows, int cols, vector<vector<bool>> &isVisited) {
-		int cnt = 0;
-		// 回溯的条件
-		if (!check(threshold, r, c, rows, cols)) // 坐标(r, c)无法进入返回 0
-			return 0;
+  // 回溯的核心函数
+  // 这里的 row 和 col表示当前的坐标
+  int backTracking(int threshold, int r, int c, int rows, int cols, vector<vector<bool>> &isVisited) {
+    int cnt = 0;
+    // 回溯的条件
+    if (!check(threshold, r, c, rows, cols)) // 坐标(r, c)无法进入返回 0
+      return 0;
 
-		// 若可以进入(row, col), 则递归的计算从下一个位置出发经过的格子数
-		// 下一位置：(r,c-1) (r, c+1) (r-1, c) (r+1, c)
- 		if (!isVisited[r][c]) {
-			isVisited[r][c] = true;
-			cnt = 1 + backTracking(threshold, r, c - 1, rows, cols, isVisited) \
-				+ backTracking(threshold, r, c + 1, rows, cols, isVisited) \
-				+ backTracking(threshold, r - 1, c, rows, cols, isVisited) \
-				+ backTracking(threshold, r + 1, c, rows, cols, isVisited);
-		}
-		return cnt;
+    // 若可以进入(row, col), 则递归的计算从下一个位置出发经过的格子数
+    // 下一位置：(r,c-1) (r, c+1) (r-1, c) (r+1, c)
+     if (!isVisited[r][c]) {
+      isVisited[r][c] = true;
+      cnt = 1 + backTracking(threshold, r, c - 1, rows, cols, isVisited) \
+        + backTracking(threshold, r, c + 1, rows, cols, isVisited) \
+        + backTracking(threshold, r - 1, c, rows, cols, isVisited) \
+        + backTracking(threshold, r + 1, c, rows, cols, isVisited);
+    }
+    return cnt;
 
-	}
+  }
 
-	// 检查当前位置(i,j)能否进入
-	bool check(int threshold, int r, int c, int rows, int cols) {
-		bool flag = (r >= 0 && r < rows) && (c >= 0 && c < cols);
-		if (flag && (sumOfDigit(r) + sumOfDigit(c) <= threshold) )
-			return true;
-		else
-			return false;
-	}
+  // 检查当前位置(i,j)能否进入
+  bool check(int threshold, int r, int c, int rows, int cols) {
+    bool flag = (r >= 0 && r < rows) && (c >= 0 && c < cols);
+    if (flag && (sumOfDigit(r) + sumOfDigit(c) <= threshold) )
+      return true;
+    else
+      return false;
+  }
 
-	// 计算数字各个位之和
-	int sumOfDigit(int d) {
-		int sum = 0;
-		while (d != 0) {
-			sum += d % 10;
-			d = d / 10;
-		}
-		return sum;
-	}
+  // 计算数字各个位之和
+  int sumOfDigit(int d) {
+    int sum = 0;
+    while (d != 0) {
+      sum += d % 10;
+      d = d / 10;
+    }
+    return sum;
+  }
 };
 
 /**
@@ -1698,60 +1697,60 @@ public:
  */
 class Solution_65 {
 public:
-	// str是给定的路径
-	bool hasPath(char* matrix, int rows, int cols, char* str)
-	{
-		vector<vector<bool>> isVisited(rows, vector<bool>(cols, false)); // 标记矩阵中的节点是否被访问过
+  // str是给定的路径
+  bool hasPath(char* matrix, int rows, int cols, char* str)
+  {
+    vector<vector<bool>> isVisited(rows, vector<bool>(cols, false)); // 标记矩阵中的节点是否被访问过
 
-		// 任选一个结点作为起点(矩阵中每个点都有可能是起点，故需要对每个点进行判断)
-		int index = 0;
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				if (hasPathBackTracking(matrix, i, j, rows, cols, str, index, isVisited))
-					return true;
-			}
-		}
-		return false;
-	}
+    // 任选一个结点作为起点(矩阵中每个点都有可能是起点，故需要对每个点进行判断)
+    int index = 0;
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        if (hasPathBackTracking(matrix, i, j, rows, cols, str, index, isVisited))
+          return true;
+      }
+    }
+    return false;
+  }
 
-	// 用于判断从某点出发是否能得到包含给定路径的一条路径！
-	// r,c 路径起点, index：str中字符的位置
-	bool hasPathBackTracking(char *matrix, int r, int c, int rows, int cols, char *str, int &index, vector<vector<bool>> &isVisited)
-	{
-		// 回溯条件，当str[]中最后一个字符在 matrix 中找到对应位置时，查找成功
-		if (index == strlen(str))
-			return true;
-		
-		bool pathFinded = false; // 是否找到路径的标志位
+  // 用于判断从某点出发是否能得到包含给定路径的一条路径！
+  // r,c 路径起点, index：str中字符的位置
+  bool hasPathBackTracking(char *matrix, int r, int c, int rows, int cols, char *str, int &index, vector<vector<bool>> &isVisited)
+  {
+    // 回溯条件，当str[]中最后一个字符在 matrix 中找到对应位置时，查找成功
+    if (index == strlen(str))
+      return true;
+    
+    bool pathFinded = false; // 是否找到路径的标志位
 
-		if (check(matrix, r, c, rows, cols, str, index, isVisited)) {
-			index++;
-			isVisited[r][c] = true;
+    if (check(matrix, r, c, rows, cols, str, index, isVisited)) {
+      index++;
+      isVisited[r][c] = true;
 
-			// 递归的从[r,c]的相邻结点寻找路径
-			// 下一位置：(r,c-1) (r, c+1) (r-1, c) (r+1, c)
-			pathFinded = hasPathBackTracking(matrix, r, c - 1, rows, cols, str, index, isVisited) \
-				|| hasPathBackTracking(matrix, r, c + 1, rows, cols, str, index, isVisited) \
-				|| hasPathBackTracking(matrix, r - 1, c, rows, cols, str, index, isVisited) \
-				|| hasPathBackTracking(matrix, r + 1, c, rows, cols, str, index, isVisited);
+      // 递归的从[r,c]的相邻结点寻找路径
+      // 下一位置：(r,c-1) (r, c+1) (r-1, c) (r+1, c)
+      pathFinded = hasPathBackTracking(matrix, r, c - 1, rows, cols, str, index, isVisited) \
+        || hasPathBackTracking(matrix, r, c + 1, rows, cols, str, index, isVisited) \
+        || hasPathBackTracking(matrix, r - 1, c, rows, cols, str, index, isVisited) \
+        || hasPathBackTracking(matrix, r + 1, c, rows, cols, str, index, isVisited);
 
-			// 若pathFinded == fales,说明当前结点(r,c)的相邻结点均无法匹配路径str中的第index+1个字符，此时
-			// 回到前一个字符（令index--），同时标记isVisited[r][c]=false, 即寻找其他的节点与路径str[i]进行匹配
-			if (!pathFinded) {
-				index--;
-				isVisited[r][c] = false;
-			}
-		}
-		return pathFinded;		
-	}
+      // 若pathFinded == fales,说明当前结点(r,c)的相邻结点均无法匹配路径str中的第index+1个字符，此时
+      // 回到前一个字符（令index--），同时标记isVisited[r][c]=false, 即寻找其他的节点与路径str[i]进行匹配
+      if (!pathFinded) {
+        index--;
+        isVisited[r][c] = false;
+      }
+    }
+    return pathFinded;    
+  }
 
-	// 检测是否继续寻找当前矩阵结点 (r,c) 相邻的节点
-	bool check(char *matrix, int r, int c, int rows, int cols, char *str, int &index, vector<vector<bool>> &isVisited) {
-		bool flag = (r >= 0 && r < rows) && (c >= 0 && c < cols) && (str[index] == matrix[r*cols + c]) \
-			&& !isVisited[r][c];
+  // 检测是否继续寻找当前矩阵结点 (r,c) 相邻的节点
+  bool check(char *matrix, int r, int c, int rows, int cols, char *str, int &index, vector<vector<bool>> &isVisited) {
+    bool flag = (r >= 0 && r < rows) && (c >= 0 && c < cols) && (str[index] == matrix[r*cols + c]) \
+      && !isVisited[r][c];
 
-		return flag;
-	}
+    return flag;
+  }
 };
 
 /**
@@ -1766,26 +1765,26 @@ public:
  */
 class Solution_subtree {
 public:
-	bool HasSubtree(TreeNode* pRoot1, TreeNode* pRoot2) {
-		if (pRoot1 == nullptr || pRoot2 == nullptr)
-			return false;
-		return isSubtreeWithSameRoot(pRoot1, pRoot2) \
-			|| HasSubtree(pRoot1->left, pRoot2) \
-			|| HasSubtree(pRoot1->right, pRoot2);
-	}
-	
-	bool isSubtreeWithSameRoot(TreeNode* p1, TreeNode* p2) {
-		if (p2 == nullptr) // p2树中的结点判断完毕
-			return true; 
-		if (p1 == nullptr)
-			return false;
+  bool HasSubtree(TreeNode* pRoot1, TreeNode* pRoot2) {
+    if (pRoot1 == nullptr || pRoot2 == nullptr)
+      return false;
+    return isSubtreeWithSameRoot(pRoot1, pRoot2) \
+      || HasSubtree(pRoot1->left, pRoot2) \
+      || HasSubtree(pRoot1->right, pRoot2);
+  }
+  
+  bool isSubtreeWithSameRoot(TreeNode* p1, TreeNode* p2) {
+    if (p2 == nullptr) // p2树中的结点判断完毕
+      return true; 
+    if (p1 == nullptr)
+      return false;
 
-		// p1和p2均不为空
-		if (p1->val != p2->val)
-			return false;
-		else
-			return isSubtreeWithSameRoot(p1->left, p2->left) && isSubtreeWithSameRoot(p1->right, p2->right);
-	}
+    // p1和p2均不为空
+    if (p1->val != p2->val)
+      return false;
+    else
+      return isSubtreeWithSameRoot(p1->left, p2->left) && isSubtreeWithSameRoot(p1->right, p2->right);
+  }
 };
 
 /**
@@ -1798,39 +1797,39 @@ public:
  */
 class Solution_bst_to_LinkedList {
 private:
-	TreeNode *pLastNode = nullptr; // 已经排序好的链表中的最后一个结点指针
-	TreeNode *head = nullptr;
+  TreeNode *pLastNode = nullptr; // 已经排序好的链表中的最后一个结点指针
+  TreeNode *head = nullptr;
 public:
-	TreeNode* Convert(TreeNode* pRootOfTree)
-	{
-		if (pRootOfTree == nullptr)
-			return nullptr;
-		InorderConvert(pRootOfTree);
-		return head;
-	}
+  TreeNode* Convert(TreeNode* pRootOfTree)
+  {
+    if (pRootOfTree == nullptr)
+      return nullptr;
+    InorderConvert(pRootOfTree);
+    return head;
+  }
 
-	// 采用中序遍历的思路进行转换
-	void InorderConvert(TreeNode* root) {
-		if (root == nullptr)
-			return; // 递归终止条件
+  // 采用中序遍历的思路进行转换
+  void InorderConvert(TreeNode* root) {
+    if (root == nullptr)
+      return; // 递归终止条件
 
-		// 1. 先对左子树递归处理，形成排序链表
-		InorderConvert(root->left);
+    // 1. 先对左子树递归处理，形成排序链表
+    InorderConvert(root->left);
 
-		// 2. 将左子树链表最后一个结点 pLastNode 与当前 root 连接
-		root->left = pLastNode;
-		if (pLastNode == nullptr)
-			pLastNode = root; // 当 pLastNode 为空时，已经遍历至最左边的结点，即链表的第一个结点
-		else { // pLastNode!=null，指向已排序链表的最后一个结点
-			pLastNode->right = root; // 链表中增加了一个结点root,故pLastNode向后移动一位
-			pLastNode = root;
-		}
-		if (head == nullptr) // 此时遍历至树的最左边结点，将其作为头结点
-			head = root;
-		// 3. 经过 1 和 2, 所遍历的结点均已形成链表，且 pLastNode指向链表的最后一个结点，
-		// 此时递归的对右子树进行处理
-		InorderConvert(root->right);
-	}
+    // 2. 将左子树链表最后一个结点 pLastNode 与当前 root 连接
+    root->left = pLastNode;
+    if (pLastNode == nullptr)
+      pLastNode = root; // 当 pLastNode 为空时，已经遍历至最左边的结点，即链表的第一个结点
+    else { // pLastNode!=null，指向已排序链表的最后一个结点
+      pLastNode->right = root; // 链表中增加了一个结点root,故pLastNode向后移动一位
+      pLastNode = root;
+    }
+    if (head == nullptr) // 此时遍历至树的最左边结点，将其作为头结点
+      head = root;
+    // 3. 经过 1 和 2, 所遍历的结点均已形成链表，且 pLastNode指向链表的最后一个结点，
+    // 此时递归的对右子树进行处理
+    InorderConvert(root->right);
+  }
 };
 
 /**
@@ -1840,31 +1839,31 @@ public:
  * @method: 把指定结点的后继节点的值赋给当前结点。这样无需要查找待删除节点的前驱结点
  */
 void DeleteNode(ListNode* &pListHead, ListNode *node) {
-	if (pListHead == nullptr || node == nullptr)
-		return;
+  if (pListHead == nullptr || node == nullptr)
+    return;
 
-	if (node->next != nullptr) {
-		ListNode *pNext = node->next; // node在前，pNext在后
-		node->val = pNext->val;
+  if (node->next != nullptr) {
+    ListNode *pNext = node->next; // node在前，pNext在后
+    node->val = pNext->val;
 
-		node->next = pNext->next;
-		// 删除pNext
-		delete pNext;
-		pNext = nullptr;
-	}
-	else if (node == pListHead) { // 删除的是头结点
-		delete node;
-		pListHead = node = nullptr;
-	} 
-	else { // 待删除节点为尾节点
-		ListNode *pTemp = pListHead;
-		while (pTemp->next != node)
-			pTemp = pTemp->next;
+    node->next = pNext->next;
+    // 删除pNext
+    delete pNext;
+    pNext = nullptr;
+  }
+  else if (node == pListHead) { // 删除的是头结点
+    delete node;
+    pListHead = node = nullptr;
+  } 
+  else { // 待删除节点为尾节点
+    ListNode *pTemp = pListHead;
+    while (pTemp->next != node)
+      pTemp = pTemp->next;
 
-		pTemp->next = nullptr;
-		delete node;
-		node = nullptr;
-	}
+    pTemp->next = nullptr;
+    delete node;
+    node = nullptr;
+  }
 }
 
 /**
@@ -1914,27 +1913,27 @@ void reverseWords(string &s) {
 // test codes
 int main()
 {
-	//priority_queue<int> q;
-	//for (int i = 10; i > 0; i--)  
-	//	q.push(i); // 默认按从大到小排列，队首最大（q.top指向队首）
+  //priority_queue<int> q;
+  //for (int i = 10; i > 0; i--)  
+  //  q.push(i); // 默认按从大到小排列，队首最大（q.top指向队首）
 
-	//cout << q.top() << endl;
-	//q.pop();
+  //cout << q.top() << endl;
+  //q.pop();
 
-	//cout << q.top() << endl;
-	//q.pop();
+  //cout << q.top() << endl;
+  //q.pop();
 
-	//cout << q.top() << endl;
-	//q.pop();
+  //cout << q.top() << endl;
+  //q.pop();
 
-	//q.push(100);
-	//cout << q.top() << endl;
+  //q.push(100);
+  //cout << q.top() << endl;
 
-	// 使用优先队列构造小顶堆：元素按从小到大排列
-	//priority_queue<int, vector<int>, greater<int>> q; // 需要包含头文件<functional>
+  // 使用优先队列构造小顶堆：元素按从小到大排列
+  //priority_queue<int, vector<int>, greater<int>> q; // 需要包含头文件<functional>
 
-	int i = 0;
-	int a = i++;
-	cout << a << " " << i << endl;
-	return 0;
+  int i = 0;
+  int a = i++;
+  cout << a << " " << i << endl;
+  return 0;
 }
